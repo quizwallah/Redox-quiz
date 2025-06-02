@@ -3,387 +3,250 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Redox Quiz</title>
+<title>Redox Reaction Quiz</title>
 <style>
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-    color: #fff;
-    margin: 0; padding: 0;
-    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    margin: 15px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  header {
-    display: flex; align-items: center; padding: 10px 15px; background: #1a1aff;
-  }
-  header img {
-    height: 50px;
-    margin-right: 15px;
-  }
-  header h1 {
-    font-size: 24px;
-    margin: 0;
-    font-weight: 700;
-  }
-  main {
-    max-width: 600px;
-    margin: 30px auto 60px;
-    padding: 0 15px;
+  h1 {
+    text-align: center;
   }
   .question {
-    background: rgba(255 255 255 / 0.1);
-    border-radius: 8px;
-    padding: 15px;
-    display: none;
+    margin-bottom: 15px;
   }
-  .question.active {
+  .answers label {
     display: block;
-  }
-  .question h3 {
-    margin-top: 0;
-  }
-  label {
-    display: block;
-    margin: 8px 0;
+    margin: 5px 0;
     cursor: pointer;
   }
-  input[type="radio"] {
-    margin-right: 8px;
+  #statusPanel {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+  }
+  .status-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .unanswered {
+    background-color: gray;
+  }
+  .answered {
+    background-color: green;
+  }
+  .skipped {
+    background-color: orange;
+  }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
   }
   #navigation {
     margin-top: 15px;
-    text-align: center;
-  }
-  button, #nextBtn {
-    background: #FF5F6D;
-    background-image: linear-gradient(315deg, #FF5F6D 0%, #FFC371 74%);
-    border: none;
-    padding: 15px 25px;
-    font-size: 18px;
-    color: #fff;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin: 5px;
-  }
-  button:hover, #nextBtn:hover {
-    background-image: linear-gradient(315deg, #FFC371 0%, #FF5F6D 74%);
-  }
-
-  /* Status Panel */
-  #statusPanel {
     display: flex;
-    justify-content: center;
-    margin-bottom: 25px;
-    gap: 12px;
+    justify-content: space-between;
   }
-  .status-circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    line-height: 28px;
-    text-align: center;
-    font-weight: 700;
-    cursor: pointer;
-    user-select: none;
-    color: #000;
+  #navigation button {
+    width: 120px;
   }
-  .unanswered {
-    background: #bbb;
-  }
-  .answered {
-    background: #4caf50;
-    color: #fff;
-  }
-  .skipped {
-    background: #ff9800;
-    color: #fff;
-  }
-
-  /* Modal Styles */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-  .modal {
-    background: #121a4a;
-    padding: 25px 30px;
-    border-radius: 12px;
-    max-width: 400px;
-    color: #fff;
-    text-align: center;
-    box-shadow: 0 0 25px #FF5F6D;
-  }
-  .modal h2 {
-    margin-top: 0;
-  }
-  .modal p {
-    font-size: 16px;
-    margin: 20px 0;
-  }
-  .modal button {
-    margin-top: 10px;
+  #result {
+    font-weight: bold;
     font-size: 18px;
-    width: 100%;
+    margin-top: 20px;
   }
-
-  footer {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #000DFF;
-    text-align: center;
-    padding: 8px;
-    font-size: 14px;
-    color: #fff;
-  }
-  @media (max-width: 480px) {
-    main {
-      margin: 20px 10px 70px;
-    }
-    button, #nextBtn {
-      width: 100%;
-      padding: 15px;
-    }
-    #statusPanel {
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+  .question-number {
+    font-weight: bold;
   }
 </style>
 </head>
 <body>
 
-<header>
-  <img src="https://i.ibb.co/fvPPbZK/logo.png" alt="Redox Quiz Logo" />
-  <h1>Redox Reaction Quiz</h1>
-</header>
+<h1>Redox Reaction Quiz</h1>
 
-<main>
-  <div id="statusPanel" aria-label="Question status navigation"></div>
-
-  <form id="quizForm" novalidate>
-    <div class="question active" id="q1">
-      <h3>1. What is the oxidation state of Mn in KMnO<sub>4</sub>?</h3>
-      <label><input type="radio" name="q1" value="a" /> +7</label>
-      <label><input type="radio" name="q1" value="b" /> +6</label>
-      <label><input type="radio" name="q1" value="c" /> +4</label>
-      <label><input type="radio" name="q1" value="d" /> +2</label>
-    </div>
-
-    <div class="question" id="q2">
-      <h3>2. In the reaction Zn + Cu<sup>2+</sup> → Zn<sup>2+</sup> + Cu, which element is oxidized?</h3>
-      <label><input type="radio" name="q2" value="a" /> Zn</label>
-      <label><input type="radio" name="q2" value="b" /> Cu</label>
-      <label><input type="radio" name="q2" value="c" /> Both</label>
-      <label><input type="radio" name="q2" value="d" /> None</label>
-    </div>
-
-    <div class="question" id="q3">
-      <h3>3. Which of the following is a reducing agent?</h3>
-      <label><input type="radio" name="q3" value="a" /> H<sub>2</sub>O</label>
-      <label><input type="radio" name="q3" value="b" /> Na</label>
-      <label><input type="radio" name="q3" value="c" /> O<sub>2</sub></label>
-      <label><input type="radio" name="q3" value="d" /> Cl<sub>2</sub></label>
-    </div>
-
-    <div class="question" id="q4">
-      <h3>4. Which element acts as an oxidizing agent in Fe<sup>3+</sup> + e<sup>-</sup> → Fe<sup>2+</sup>?</h3>
-      <label><input type="radio" name="q4" value="a" /> Fe<sup>3+</sup></label>
-      <label><input type="radio" name="q4" value="b" /> Fe<sup>2+</sup></label>
-      <label><input type="radio" name="q4" value="c" /> e<sup>-</sup></label>
-      <label><input type="radio" name="q4" value="d" /> None</label>
-    </div>
-
-    <div class="question" id="q5">
-      <h3>5. In the reaction 2Na + Cl<sub>2</sub> → 2NaCl, which is oxidized?</h3>
-      <label><input type="radio" name="q5" value="a" /> Na</label>
-      <label><input type="radio" name="q5" value="b" /> Cl<sub>2</sub></label>
-      <label><input type="radio" name="q5" value="c" /> Both</label>
-      <label><input type="radio" name="q5" value="d" /> None</label>
-    </div>
-
-    <div id="navigation">
-      <button type="button" id="nextBtn">Next Question</button>
-      <button type="submit" id="submitBtn" style="display:none;">Submit Quiz</button>
-    </div>
-  </form>
-</main>
-
-<!-- Instructions Modal -->
-<div id="instructionsModal" class="modal-overlay">
-  <div class="modal">
-    <h2>Instructions</h2>
-    <p>
-      - There are 5 questions.<br/>
-      - You can leave any question unanswered.<br/>
-      - Select the best answer for each.<br/>
-      - After submitting, you will see your score and detailed solutions.<br/>
-      - Use the "Next Question" button to navigate.<br/>
-      - Have fun!
-    </p>
-    <button id="startQuizBtn">Start Quiz</button>
-  </div>
+<div id="instructions" style="background:#eef; padding:10px; margin-bottom:20px;">
+  <strong>Instructions:</strong> Select the correct answer for each question. You can skip any question and come back later. After answering all questions, click Submit to see your score.
 </div>
 
-<footer>Redox Quiz © 2025</footer>
+<div id="quizContainer">
+  <!-- Question will be loaded here -->
+</div>
+
+<div id="navigation">
+  <button id="prevBtn" disabled>Previous</button>
+  <button id="nextBtn">Next</button>
+</div>
+
+<div id="statusPanel" aria-label="Question status panel">
+  <!-- Circles for question status will be here -->
+</div>
+
+<button id="submitBtn" disabled>Submit Quiz</button>
+
+<div id="result"></div>
 
 <script>
-  const modal = document.getElementById('instructionsModal');
-  const startBtn = document.getElementById('startQuizBtn');
-  const form = document.getElementById('quizForm');
-  const nextBtn = document.getElementById('nextBtn');
-  const submitBtn = document.getElementById('submitBtn');
-  const statusPanel = document.getElementById('statusPanel');
-  const questions = Array.from(document.querySelectorAll('.question'));
-  let currentIndex = 0;
-
-  // Show instructions modal on page load
-  window.onload = () => {
-    modal.style.display = 'flex';
-    buildStatusPanel();
-    updateStatusPanel();
-  };
-
-  startBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-    showQuestion(currentIndex);
-  });
-
-  function showQuestion(index) {
-    questions.forEach((q, i) => {
-      q.classList.toggle('active', i === index);
-    });
-    updateStatusPanel();
-    // Show submit button only on last question
-    if(index === questions.length -1){
-      nextBtn.style.display = 'none';
-      submitBtn.style.display = 'inline-block';
-    } else {
-      nextBtn.style.display = 'inline-block';
-      submitBtn.style.display = 'none';
+  // Questions Array
+  const questions = [
+    {
+      q: "1. In the reaction: Fe<sup>3+</sup> + Zn → Fe<sup>2+</sup> + Zn<sup>2+</sup>, what is the oxidizing agent?",
+      options: ["Fe<sup>3+</sup>", "Zn", "Fe<sup>2+</sup>", "Zn<sup>2+</sup>"],
+      answer: 0,
+      solution: "Fe<sup>3+</sup> gains electrons (is reduced), so it is the oxidizing agent."
+    },
+    {
+      q: "2. Which of the following is a redox reaction?",
+      options: [
+        "H<sub>2</sub> + Cl<sub>2</sub> → 2HCl",
+        "NaOH + HCl → NaCl + H<sub>2</sub>O",
+        "BaCl<sub>2</sub> + H<sub>2</sub>SO<sub>4</sub> → BaSO<sub>4</sub> + 2HCl",
+        "CH<sub>4</sub> + 2O<sub>2</sub> → CO<sub>2</sub> + 2H<sub>2</sub>O"
+      ],
+      answer: 0,
+      solution: "H<sub>2</sub> and Cl<sub>2</sub> are elements that change oxidation states, so this is a redox reaction."
+    },
+    {
+      q: "3. In the reaction 2MnO<sub>4</sub><sup>-</sup> + 10Cl<sup>-</sup> + 16H<sup>+</sup> → 2Mn<sup>2+</sup> + 5Cl<sub>2</sub> + 8H<sub>2</sub>O, what is being oxidized?",
+      options: ["MnO<sub>4</sub><sup>-</sup>", "Cl<sup>-</sup>", "Mn<sup>2+</sup>", "H<sup>+</sup>"],
+      answer: 1,
+      solution: "Cl<sup>-</sup> is oxidized to Cl<sub>2</sub>."
+    },
+    {
+      q: "4. Identify the reducing agent in: CuO + H<sub>2</sub> → Cu + H<sub>2</sub>O",
+      options: ["CuO", "H<sub>2</sub>", "Cu", "H<sub>2</sub>O"],
+      answer: 1,
+      solution: "H<sub>2</sub> loses electrons and reduces CuO, so it is the reducing agent."
+    },
+    {
+      q: "5. The oxidation number of chromium in K<sub>2</sub>Cr<sub>2</sub>O<sub>7</sub> is:",
+      options: ["+3", "+6", "+7", "+4"],
+      answer: 1,
+      solution: "Chromium is in +6 oxidation state in dichromate ion."
     }
+    // Add more questions here to reach 20 as needed
+  ];
+
+  let currentQuestionIndex = 0;
+  let userAnswers = new Array(questions.length).fill(null);
+
+  const quizContainer = document.getElementById("quizContainer");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const submitBtn = document.getElementById("submitBtn");
+  const statusPanel = document.getElementById("statusPanel");
+  const resultDiv = document.getElementById("result");
+
+  function renderQuestion(index) {
+    const q = questions[index];
+    let html = `<div class="question"><span class="question-number">Question ${index + 1}:</span> ${q.q}</div>`;
+    html += `<div class="answers">`;
+    q.options.forEach((option, i) => {
+      // Use radio buttons named by question index so only one selection per question
+      const checked = userAnswers[index] === i ? "checked" : "";
+      html += `
+        <label>
+          <input type="radio" name="q${index}" value="${i}" ${checked} />
+          ${option}
+        </label>`;
+    });
+    html += `</div>`;
+    quizContainer.innerHTML = html;
+
+    // Disable prev on first question, disable next on last question
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === questions.length - 1;
+
+    updateStatusPanel();
+    updateSubmitButton();
   }
 
-  // Build status panel circles
-  function buildStatusPanel() {
-    statusPanel.innerHTML = '';
-    questions.forEach((q, i) => {
-      const circle = document.createElement('div');
-      circle.className = 'status-circle unanswered';
-      circle.textContent = i + 1;
-      circle.title = `Go to Question ${i + 1}`;
-      circle.tabIndex = 0;
-      circle.setAttribute('role', 'button');
-      circle.addEventListener('click', () => {
-        currentIndex = i;
-        showQuestion(currentIndex);
-      });
-      circle.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          currentIndex = i;
-          showQuestion(currentIndex);
-        }
-      });
+  function updateStatusPanel() {
+    statusPanel.innerHTML = "";
+    userAnswers.forEach((ans, i) => {
+      let cls = "unanswered";
+      if (ans === null) cls = "unanswered";
+      else if (ans === "skipped") cls = "skipped";
+      else cls = "answered";
+
+      // Show a small colored circle with tooltip for question number
+      const circle = document.createElement("span");
+      circle.className = `status-circle ${cls}`;
+      circle.title = `Question ${i + 1} - ${cls.charAt(0).toUpperCase() + cls.slice(1)}`;
+      circle.style.cursor = "pointer";
+      circle.onclick = () => {
+        currentQuestionIndex = i;
+        renderQuestion(currentQuestionIndex);
+      };
       statusPanel.appendChild(circle);
     });
   }
 
-  // Update colors in status panel based on answer state
-  function updateStatusPanel() {
-    questions.forEach((q, i) => {
-      const circle = statusPanel.children[i];
-      const name = q.querySelector('input[type="radio"]').name;
-      const inputs = q.querySelectorAll('input[type="radio"]');
-      let answered = false;
-      let skipped = false;
-
-      // Check if any option is selected
-      inputs.forEach(input => {
-        if(input.checked) answered = true;
-      });
-
-      // If currently displayed question and no answer yet, but user clicked next, mark skipped
-      if(!answered && i < currentIndex) {
-        skipped = true;
-      }
-
-      if(answered) {
-        circle.className = 'status-circle answered';
-      } else if(skipped) {
-        circle.className = 'status-circle skipped';
-      } else {
-        circle.className = 'status-circle unanswered';
-      }
-    });
+  function updateSubmitButton() {
+    // Enable submit only if at least one question answered
+    submitBtn.disabled = !userAnswers.some(ans => ans !== null && ans !== "skipped");
   }
 
-  // When user clicks Next Question button
-  nextBtn.addEventListener('click', () => {
-    // Mark current question as skipped if unanswered
+  function recordAnswer() {
+    const radios = document.querySelectorAll('input[name="q' + currentQuestionIndex + '"]');
+    let selected = null;
+    radios.forEach(radio => {
+      if (radio.checked) selected = parseInt(radio.value);
+    });
+    userAnswers[currentQuestionIndex] = selected;
     updateStatusPanel();
+    updateSubmitButton();
+  }
 
-    if(currentIndex < questions.length -1) {
-      currentIndex++;
-      showQuestion(currentIndex);
+  prevBtn.addEventListener("click", () => {
+    recordAnswer();
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      renderQuestion(currentQuestionIndex);
     }
   });
 
-  // On any answer change, update the status panel colors
-  form.addEventListener('change', e => {
-    updateStatusPanel();
-  });
-
-  // Submit event
-  const answers = {
-    q1: 'a',
-    q2: 'a',
-    q3: 'b',
-    q4: 'a',
-    q5: 'a'
-  };
-
-  const solutions = {
-    q1: 'The oxidation state of Mn in KMnO4 is +7.',
-    q2: 'Zn loses electrons, so Zn is oxidized.',
-    q3: 'Na is a strong reducing agent.',
-    q4: 'Fe3+ gains electrons and acts as oxidizing agent.',
-    q5: 'Na is oxidized as it loses electrons to form NaCl.'
-  };
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const userAnswers = {};
-    let score = 0;
-    let total = Object.keys(answers).length;
-
-    for(let q in answers) {
-      const radios = form.elements[q];
-      let userAnswer = null;
-      if(radios) {
-        for(let r of radios) {
-          if(r.checked) {
-            userAnswer = r.value;
-            break;
-          }
-        }
-      }
-      userAnswers[q] = userAnswer;
-      if(userAnswer === answers[q]) score++;
+  nextBtn.addEventListener("click", () => {
+    recordAnswer();
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      renderQuestion(currentQuestionIndex);
     }
-
-    localStorage.setItem('redoxQuizUserAnswers', JSON.stringify(userAnswers));
-    localStorage.setItem('redoxQuizScore', score);
-    localStorage.setItem('redoxQuizTotal', total);
-    localStorage.setItem('redoxQuizSolutions', JSON.stringify(solutions));
-
-    window.location.href = 'solutions.html';
   });
+
+  submitBtn.addEventListener("click", () => {
+    recordAnswer();
+    let correctCount = 0;
+    questions.forEach((q, i) => {
+      if (userAnswers[i] === q.answer) correctCount++;
+    });
+    resultDiv.innerHTML = `You scored ${correctCount} out of ${questions.length}. <br>Click <a href="solution.html" target="_blank">here</a> to view detailed solutions.`;
+    // Optionally, disable further changes after submit
+    submitBtn.disabled = true;
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    quizContainer.innerHTML = "";
+    statusPanel.innerHTML = "";
+  });
+
+  // When user changes selection, update answer immediately
+  quizContainer.addEventListener("change", (e) => {
+    if (e.target && e.target.matches('input[type="radio"]')) {
+      recordAnswer();
+    }
+  });
+
+  // Initialize status panel with all unanswered
+  for (let i = 0; i < questions.length; i++) {
+    userAnswers[i] = null;
+  }
+
+  renderQuestion(currentQuestionIndex);
 </script>
 
 </body>

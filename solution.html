@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Redox Reaction Quiz Solutions</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 15px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #f9f9f9;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .solution {
+    background: white;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .question-text {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .solution-text {
+    margin-top: 5px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Solutions to Redox Reaction Quiz</h1>
+
+<div id="solutionsContainer"></div>
+
+<script>
+  const questions = [
+    {
+      q: "1. In the reaction: Fe<sup>3+</sup> + Zn → Fe<sup>2+</sup> + Zn<sup>2+</sup>, what is the oxidizing agent?",
+      solution: "Fe<sup>3+</sup> gains electrons (is reduced), so it is the oxidizing agent."
+    },
+    {
+      q: "2. Which of the following is a redox reaction?",
+      solution: "H<sub>2</sub> and Cl<sub>2</sub> are elements that change oxidation states, so this is a redox reaction."
+    },
+    {
+      q: "3. In the reaction 2MnO<sub>4</sub><sup>-</sup> + 10Cl<sup>-</sup> + 16H<sup>+</sup> → 2Mn<sup>2+</sup> + 5Cl<sub>2</sub> + 8H<sub>2</sub>O, what is being oxidized?",
+      solution: "Cl<sup>-</sup> is oxidized to Cl<sub>2</sub>."
+    },
+    {
+      q: "4. Identify the reducing agent in: CuO + H<sub>2</sub> → Cu + H<sub>2</sub>O",
+      solution: "H<sub>2</sub> loses electrons and reduces CuO, so it is the reducing agent."
+    },
+    {
+      q: "5. The oxidation number of chromium in K<sub>2</sub>Cr<sub>2</sub>O<sub>7</sub> is:",
+      solution: "Chromium is in +6 oxidation state in dichromate ion."
+    }
+    // Add solutions for all other questions similarly
+  ];
+
+  const container = document.getElementById("solutionsContainer");
+
+  questions.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "solution";
+    div.innerHTML = `
+      <div class="question-text">${item.q}</div>
+      <div class="solution-text">${item.solution}</div>
+    `;
+    container.appendChild(div);
+  });
+</script>
+
+</body>
+</html>
