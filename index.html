@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Redox Reaction Quiz</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #7b4397, #dc2430);
+    margin: 0; padding: 0;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+  }
+
+  #container {
+    background: #fff;
+    max-width: 650px;
+    width: 95%;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+
+  header {
+    background: #7b4397;
+    background: linear-gradient(135deg, #7b4397, #dc2430);
+    padding: 20px 0;
+    text-align: center;
+    color: white;
+  }
+  header img {
+    max-width: 140px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 2.1rem;
+    letter-spacing: 1.2px;
+  }
+
+  /* Instructions Screen */
+  #instructions {
+    padding: 25px 30px;
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #333;
+  }
+  #startBtn {
+    margin-top: 25px;
+    background: #dc2430;
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    padding: 14px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 6px 10px rgba(220,36,48,0.6);
+  }
+  #startBtn:hover {
+    background: #a72023;
+    box-shadow: 0 8px 14px rgba(167,32,35,0.8);
+  }
+
+  /* Quiz form */
+  #quizForm {
+    padding: 25px 30px;
+    display: none;
+    background: #fff;
+  }
+
+  .question {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+  }
+  .question:last-child {
+    border: none;
+    padding-bottom: 0;
+  }
+  .question h3 {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #7b4397;
+  }
+  label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #444;
+    transition: color 0.25s ease;
+  }
+  label:hover {
+    color: #dc2430;
+  }
+  input[type="radio"] {
+    margin-right: 10px;
+    accent-color: #dc2430;
+    cursor: pointer;
+  }
+
+  button#submitBtn {
+    background: #7b4397;
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    border-radius: 7px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 10px rgba(123,67,151,0.7);
+    transition: background 0.3s ease;
+  }
+  button#submitBtn:hover {
+    background: #5a2e88;
+  }
+
+  /* Results and solutions */
+  #result {
+    margin-top: 30px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+    color: #dc2430;
+  }
+  .solution {
+    margin-top: 10px;
+    background: #f9f4fc;
+    border-left: 5px solid #dc2430;
+    padding: 12px 15px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #333;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div id="container">
+
+  <header>
+    <img src="https://i.ibb.co/TPBshk9/redox-logo.png" alt="Redox Quiz Logo" />
+    <h1>Redox Reaction Quiz</h1>
+  </header>
+
+  <!-- Instructions Screen -->
+  <section id="instructions">
+    <p>Welcome to the Redox Reaction Quiz!<br><br>
+    You will be given 5 multiple-choice questions about redox reactions.<br>
+    Select the best answer for each question.<br><br>
+    After submitting, you will see your score and detailed explanations for each question.<br><br>
+    Click <strong>Start Quiz</strong> when you're ready to begin!</p>
+    <button id="startBtn">Start Quiz</button>
+  </section>
+
+  <!-- Quiz Form -->
+  <form id="quizForm">
+
+    <div class="question">
+      <h3>1. Identify the oxidizing agent in the reaction: Zn + Cu²⁺ → Zn²⁺ + Cu</h3>
+      <label><input type="radio" name="q1" value="a" /> Zn</label>
+      <label><input type="radio" name="q1" value="b" /> Cu²⁺</label>
+      <label><input type="radio" name="q1" value="c" /> Zn²⁺</label>
+      <label><input type="radio" name="q1" value="d" /> Cu</label>
+      <div class="solution" id="sol1" style="display:none;">
+        <strong>Solution:</strong> Cu²⁺ is reduced by gaining electrons, so it is the oxidizing agent.
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>2. In the reaction 2Fe³⁺ + Sn²⁺ → 2Fe²⁺ + Sn⁴⁺, which species is reduced?</h3>
+      <label><input type="radio" name="q2" value="a" /> Fe³⁺</label>
+      <label><input type="radio" name="q2" value="b" /> Sn²⁺</label>
+      <label><input type="radio" name="q2" value="c" /> Fe²⁺</label>
+      <label><input type="radio" name="q2" value="d" /> Sn⁴⁺</label>
+      <div class="solution" id="sol2" style="display:none;">
+        <strong>Solution:</strong> Fe³⁺ is reduced to Fe²⁺ by gaining electrons.
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>3. What is the oxidation number of sulfur in SO₄²⁻?</h3>
+      <label><input type="radio" name="q3" value="a" /> +6</label>
+      <label><input type="radio" name="q3" value="b" /> +4</label>
+      <label><input type="radio" name="q3" value="c" /> -2</label>
+      <label><input type="radio" name="q3" value="d" /> 0</label>
+      <div class="solution" id="sol3" style="display:none;">
+        <strong>Solution:</strong> Sulfur has an oxidation state of +6 in sulfate ion.
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>4. Which element is oxidized in the reaction: 2Na + Cl₂ → 2NaCl?</h3>
+      <label><input type="radio" name="q4" value="a" /> Na</label>
+      <label><input type="radio" name="q4" value="b" /> Cl₂</label>
+      <label><input type="radio" name="q4" value="c" /> NaCl</label>
+      <label><input type="radio" name="q4" value="d" /> None</label>
+      <div class="solution" id="sol4" style="display:none;">
+        <strong>Solution:</strong> Sodium (Na) loses electrons, so it is oxidized.
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>5. In the redox reaction, electrons are:</h3>
+      <label><input type="radio" name="q5" value="a" /> Gained by oxidizing agent</label>
+      <label><input type="radio" name="q5" value="b" /> Lost by oxidizing agent</label>
+      <label><input type="radio" name="q5" value="c" /> Lost by reducing agent</label>
+      <label><input type="radio" name="q5" value="d" /> Gained by reducing agent</label>
+      <div class="solution" id="sol5" style="display:none;">
+        <strong>Solution:</strong> Electrons are lost by the reducing agent during oxidation.
+      </div>
+    </div>
+
+    <button type="button" id="submitBtn">Submit Quiz</button>
+  </form>
+
+  <div id="result"></div>
+
+</div>
+
+<script>
+  const answers = {
+    q1: 'b',
+    q2: 'a',
+    q3: 'a',
+    q4: 'a',
+    q5: 'c',
+  };
+
+  const startBtn = document.getElementById('startBtn');
+  const instructions = document.getElementById('instructions');
+  const quizForm = document.getElementById('quizForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const resultDiv = document.getElementById('result');
+
+  // Show quiz, hide instructions on Start Quiz click
+  startBtn.addEventListener('click', () => {
+    instructions.style.display = 'none';
+    quizForm.style.display = 'block';
+  });
+
+  submitBtn.addEventListener('click', () => {
+    let score = 0;
+    let unanswered = 0;
+
+    // Hide all solutions first
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('sol'+i).style.display = 'none';
+    }
+
+    for (const q in answers) {
+      const selected = quizForm.elements[q].value || null;
+      if (!selected) {
+        unanswered++;
+      } else if (selected === answers[q]) {
+        score++;
+      }
+    }
+
+    if (unanswered > 0) {
+      alert(`Please answer all questions! You have ${unanswered} unanswered.`);
+      return;
+    }
+
+    const total = Object.keys(answers).length;
+    const incorrect = total - score;
+
+    // Show results
+    resultDiv.textContent = `Your Score: ${score} / ${total} | Correct: ${score} | Incorrect: ${incorrect}`;
+
+    // Show solutions for all questions
+    for (let i = 1; i <= total; i++) {
+      document.getElementById('sol'+i).style.display = 'block';
+    }
+
+    // Disable submit button after submission to prevent resubmission
+    submitBtn.disabled = true;
+    submitBtn.style.background = '#999';
+    submitBtn.style.cursor = 'default';
+  });
+</script>
+
+</body>
+</html>
